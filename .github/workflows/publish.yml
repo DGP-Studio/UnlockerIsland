@@ -23,4 +23,4 @@ jobs:
       run: nuget pack src\UnlockerIsland\Snap.Hutao.UnlockerIsland\Snap.Hutao.UnlockerIsland.nuspec
 
     - name: Publish to NuGet
-      run: nuget push src\UnlockerIsland\*.nupkg ${{ secrets.NUGET_API_KEY }} -src https://api.nuget.org/v3/index.json
+      run: nuget push *.nupkg ${{ secrets.NUGET_API_KEY }} -src https://api.nuget.org/v3/index.json

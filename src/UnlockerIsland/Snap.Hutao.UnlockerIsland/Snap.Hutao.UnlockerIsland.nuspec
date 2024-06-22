@@ -1,0 +1,20 @@
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Snap.Hutao.UnlockerIsland</id>
+    <version>1.0.0</version>
+    <authors>DGP Studio</authors>
+    <developmentDependency>true</developmentDependency>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/DGP-Studio/UnlockerIsland</projectUrl>
+	<description>Unlocker message sink</description>
+	<repository type="git" url="https://github.com/DGP-Studio/UnlockerIsland" commit="$commit$" />
+	<dependencies>
+	  <group targetFramework=".net8.0"/>
+	</dependencies>
+  </metadata>
+  <files>
+    <file src="..\x64\Release\Snap.Hutao.UnlockerIsland.dll" target="lib\net8.0" />
+  </files>
+</package>

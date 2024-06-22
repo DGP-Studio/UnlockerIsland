@@ -1,0 +1,26 @@
+name: Build and Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build
+      run: msbuild src\UnlockerIsland\UnlockerIsland.sln /p:Configuration=Release
+
+    - name: Pack
+      run: nuget pack src\UnlockerIsland\Snap.Hutao.UnlockerIsland\Snap.Hutao.UnlockerIsland.nuspec
+
+    - name: Publish to NuGet
+      run: nuget push src\UnlockerIsland\*.nupkg ${{ secrets.NUGET_API_KEY }} -src https://api.nuget.org/v3/index.json

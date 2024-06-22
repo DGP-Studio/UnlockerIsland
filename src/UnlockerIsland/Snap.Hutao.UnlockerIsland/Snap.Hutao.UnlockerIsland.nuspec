@@ -10,11 +10,8 @@
     <projectUrl>https://github.com/DGP-Studio/UnlockerIsland</projectUrl>
 	<description>Unlocker message sink</description>
 	<repository type="git" url="https://github.com/DGP-Studio/UnlockerIsland" commit="$commit$" />
-	<dependencies>
-	  <group targetFramework=".net8.0"/>
-	</dependencies>
   </metadata>
   <files>
-    <file src="..\x64\Release\Snap.Hutao.UnlockerIsland.dll" target="lib\net8.0" />
+    <file src="..\x64\Release\Snap.Hutao.UnlockerIsland.dll" target="runtimes\win-x64\native" />
   </files>
 </package>

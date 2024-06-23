@@ -1,6 +1,7 @@
 ﻿#include <Windows.h>
 
 #define ISLAND_API extern "C" __declspec(dllexport)
+#define ISLAND_FEATURE_HANDLE_DLL_PROCESS_DETACH false
 
 constexpr PCWSTR ISLAND_ENVIRONMENT_NAME = L"4F3E8543-40F7-4808-82DC-21E48A6037A7";
 
@@ -21,6 +22,7 @@ struct IslandEnvironment {
     INT32 Value;
     IslandState State;
     DWORD LastError;
+    INT32 Reserved;
 };
 
 template <typename THandle, typename TFree>
@@ -129,6 +131,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
             break;
 
         case DLL_PROCESS_DETACH:
+            if (!ISLAND_FEATURE_HANDLE_DLL_PROCESS_DETACH)
+            {
+                break;
+            }
+
             bDllExit = TRUE;
             if (hThread)
             {
@@ -151,6 +158,6 @@ static LRESULT WINAPI IslandGetWindowHookImpl(int code, WPARAM wParam, LPARAM lP
 // So that we can use SetWindowHookEx to inject the DLL into the game
 ISLAND_API HRESULT WINAPI IslandGetWindowHook(OUT HOOKPROC* pHookProc)
 {
-    *pHookProc = (HOOKPROC)IslandGetWindowHookImpl;
+    *pHookProc = IslandGetWindowHookImpl;
     return S_OK;
 }

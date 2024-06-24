@@ -1,7 +1,7 @@
 ﻿#include <Windows.h>
 
 #define ISLAND_API extern "C" __declspec(dllexport)
-#define ISLAND_FEATURE_HANDLE_DLL_PROCESS_DETACH false
+#define ISLAND_FEATURE_HANDLE_DLL_PROCESS_DETACH true
 
 constexpr PCWSTR ISLAND_ENVIRONMENT_NAME = L"4F3E8543-40F7-4808-82DC-21E48A6037A7";
 
@@ -23,6 +23,7 @@ struct IslandEnvironment {
     IslandState State;
     DWORD LastError;
     INT32 Reserved;
+    HHOOK HHook;
 };
 
 template <typename THandle, typename TFree>
@@ -140,10 +141,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
             }
 
             bDllExit = TRUE;
-            if (hThread)
+            if (pIslandEnvironment)
             {
-                WaitForSingleObject(hThread, INFINITE);
+                UnhookWindowsHookEx(pIslandEnvironment->HHook);
             }
+
+            Sleep(500);
 
             break;
     }

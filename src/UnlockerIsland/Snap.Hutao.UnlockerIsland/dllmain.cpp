@@ -28,7 +28,6 @@ struct IslandEnvironment {
     IslandState State;
     DWORD LastError;
     INT32 Reserved;
-    HHOOK HHook;
 };
 
 template <typename THandle, typename TFree>
@@ -148,12 +147,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
             }
 
             bDllExit = TRUE;
-
-            // !lpReversed : FreeLibrary
-            if (!lpReserved && pIslandEnvironment)
-            {
-                UnhookWindowsHookEx(pIslandEnvironment->HHook);
-            }
 
             Sleep(500);
             break;

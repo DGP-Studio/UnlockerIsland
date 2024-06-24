@@ -98,11 +98,12 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
     while (!bDllExit)
     {
         *address = pIslandEnvironment->Value;
-        Sleep(500);
+        Sleep(62);
     }
 
     pIslandEnvironment->State = IslandState::Stopped;
 
+    FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), 0);
     return 0;
 }
 
@@ -119,15 +120,17 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
         return TRUE;
     }
 
+
     switch (ul_reason_for_call)
     {
         case DLL_PROCESS_ATTACH:
-            hThread = CreateThread(NULL, 0, IslandThread, NULL, 0, NULL);
+            hThread = CreateThread(NULL, 0, IslandThread, hModule, 0, NULL);
             if (!hThread)
             {
                 return FALSE;
             }
 
+            CloseHandle(hThread);
             break;
 
         case DLL_PROCESS_DETACH:
@@ -140,7 +143,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
             if (hThread)
             {
                 WaitForSingleObject(hThread, INFINITE);
-                CloseHandle(hThread);
             }
 
             break;

@@ -4,6 +4,7 @@
 #define ISLAND_FEATURE_HANDLE_DLL_PROCESS_DETACH true
 
 constexpr PCWSTR ISLAND_ENVIRONMENT_NAME = L"4F3E8543-40F7-4808-82DC-21E48A6037A7";
+constexpr PCWSTR ISLAND_FILE_NAME = L"Snap.Hutao.UnlockerIsland.dll";
 
 HANDLE hThread = NULL;
 BOOL bDllExit = FALSE;
@@ -67,9 +68,9 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
     {
         return GetLastError();
     }
-    
+
     const SafeMappedView lpView = SafeMappedView(MapViewOfFile(hFile, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0), UnmapViewOfFile);
-    if(!lpView)
+    if (!lpView)
     {
         return GetLastError();
     }
@@ -110,6 +111,7 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
+    GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_PIN, ISLAND_FILE_NAME, &hModule);
     if (hModule)
     {
         DisableThreadLibraryCalls(hModule);
@@ -141,13 +143,14 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
             }
 
             bDllExit = TRUE;
-            if (pIslandEnvironment)
+
+            // !lpReversed : FreeLibrary
+            if (!lpReserved && pIslandEnvironment)
             {
                 UnhookWindowsHookEx(pIslandEnvironment->HHook);
             }
 
             Sleep(500);
-
             break;
     }
 

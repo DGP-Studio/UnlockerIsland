@@ -1,4 +1,8 @@
-﻿#include <Windows.h>
+﻿#pragma comment(lib, "ntdll.lib")
+#include <Windows.h>
+
+#define LDR_ADDREF_DLL_PIN 0x00000001
+EXTERN_C NTSYSAPI NTSTATUS NTAPI LdrAddRefDll(_In_ ULONG Flags, _In_ PVOID DllHandle);
 
 #define ISLAND_API extern "C" __declspec(dllexport)
 #define ISLAND_FEATURE_HANDLE_DLL_PROCESS_DETACH true
@@ -111,7 +115,6 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
-    GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_PIN, ISLAND_FILE_NAME, &hModule);
     if (hModule)
     {
         DisableThreadLibraryCalls(hModule);
@@ -127,6 +130,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
     switch (ul_reason_for_call)
     {
         case DLL_PROCESS_ATTACH:
+            LdrAddRefDll(LDR_ADDREF_DLL_PIN, hModule);
+
             hThread = CreateThread(NULL, 0, IslandThread, hModule, 0, NULL);
             if (!hThread)
             {

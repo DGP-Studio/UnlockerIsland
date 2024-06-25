@@ -1,68 +1,7 @@
-﻿#pragma comment(lib, "ntdll.lib")
-#include <Windows.h>
+﻿#include "dllmain.h"
+#include "ntprivate.h"
 
-#define LDR_ADDREF_DLL_PIN 0x00000001
-EXTERN_C NTSYSAPI NTSTATUS NTAPI LdrAddRefDll(_In_ ULONG Flags, _In_ PVOID DllHandle);
-
-#define ISLAND_API extern "C" __declspec(dllexport)
-#define ISLAND_FEATURE_HANDLE_DLL_PROCESS_DETACH true
-
-constexpr PCWSTR ISLAND_ENVIRONMENT_NAME = L"4F3E8543-40F7-4808-82DC-21E48A6037A7";
-constexpr PCWSTR ISLAND_FILE_NAME = L"Snap.Hutao.UnlockerIsland.dll";
-
-HANDLE hThread = NULL;
-BOOL bDllExit = FALSE;
-struct IslandEnvironment* pIslandEnvironment = NULL;
-
-enum IslandState : int
-{
-    None = 0,
-    Error = 1,
-    Started = 2,
-    Stopped = 3,
-};
-
-struct IslandEnvironment {
-    LPVOID Address;
-    INT32 Value;
-    IslandState State;
-    DWORD LastError;
-    INT32 Reserved;
-};
-
-template <typename THandle, typename TFree>
-class SafeHandle
-{
-private:
-    THandle m_handle;
-    TFree m_free;
-public:
-    SafeHandle(THandle handle, TFree free) : m_handle(handle), m_free(free)
-    {
-    }
-    ~SafeHandle()
-    {
-        if (m_handle)
-        {
-            m_free(m_handle);
-        }
-    }
-    THandle Get() const
-    {
-        return m_handle;
-    }
-    operator THandle() const
-    {
-        return m_handle;
-    }
-    operator bool() const
-    {
-        return m_handle != NULL && m_handle != INVALID_HANDLE_VALUE;
-    }
-};
-
-using SafeFileHandle = SafeHandle<HANDLE, decltype(&CloseHandle)>;
-using SafeMappedView = SafeHandle<LPVOID, decltype(&UnmapViewOfFile)>;
+using namespace Snap::Hutao::UnlockerIsland;
 
 static DWORD WINAPI IslandThread(LPVOID lpParam)
 {
@@ -129,7 +68,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
     switch (ul_reason_for_call)
     {
         case DLL_PROCESS_ATTACH:
-            LdrAddRefDll(LDR_ADDREF_DLL_PIN, hModule);
+            if (hModule)
+            {
+                LdrAddRefDll(LDR_ADDREF_DLL_PIN, hModule);
+            }
 
             hThread = CreateThread(NULL, 0, IslandThread, hModule, 0, NULL);
             if (!hThread)
@@ -155,15 +97,16 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
     return TRUE;
 }
 
+#pragma region Exports
+
 static LRESULT WINAPI IslandGetWindowHookImpl(int code, WPARAM wParam, LPARAM lParam)
 {
     return CallNextHookEx(NULL, code, wParam, lParam);
 }
 
-// This function is only meant to get an arbitrary function pointer from the DLL
-// So that we can use SetWindowHookEx to inject the DLL into the game
-ISLAND_API HRESULT WINAPI IslandGetWindowHook(OUT HOOKPROC* pHookProc)
+ISLAND_API HRESULT WINAPI IslandGetWindowHook(_Out_ HOOKPROC* pHookProc)
 {
     *pHookProc = IslandGetWindowHookImpl;
     return S_OK;
 }
+#pragma endregion

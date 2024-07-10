@@ -5,20 +5,20 @@ using namespace Snap::Hutao::UnlockerIsland;
 
 static DWORD WINAPI IslandThread(LPVOID lpParam)
 {
-    const SafeFileHandle hFile = SafeFileHandle(OpenFileMappingW(FILE_MAP_READ | FILE_MAP_WRITE, FALSE, ISLAND_ENVIRONMENT_NAME), CloseHandle);
+    const UNIQUE_HANDLE hFile = UNIQUE_HANDLE(OpenFileMappingW(FILE_MAP_READ | FILE_MAP_WRITE, FALSE, ISLAND_ENVIRONMENT_NAME));
     if (!hFile)
     {
         return GetLastError();
     }
 
-    const SafeMappedView lpView = SafeMappedView(MapViewOfFile(hFile, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0), UnmapViewOfFile);
+    const UNIQUE_VIEW_OF_FILE lpView = UNIQUE_VIEW_OF_FILE(MapViewOfFile(hFile.get(), FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0));
     if (!lpView)
     {
         return GetLastError();
     }
 
-    pIslandEnvironment = static_cast<IslandEnvironment*>(lpView.Get());
-    INT32* const address = reinterpret_cast<INT32*>(pIslandEnvironment->Address);
+    pIslandEnvironment = static_cast<IslandEnvironment*>(lpView.get());
+    INT32* const address = pIslandEnvironment->Address;
 
     MEMORY_BASIC_INFORMATION mbi = { 0 };
     if (!VirtualQuery(address, &mbi, sizeof(mbi)))

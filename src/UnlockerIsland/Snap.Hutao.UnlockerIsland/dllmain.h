@@ -1,8 +1,9 @@
 #pragma once
 
 #include <Windows.h>
+#include <wil/resource.h>
 
-#define ISLAND_API extern "C" __declspec(dllexport)
+#define ISLAND_API EXTERN_C __declspec(dllexport)
 
 // Feature switch
 constexpr auto ISLAND_FEATURE_HANDLE_DLL_PROCESS_DETACH = true;
@@ -27,22 +28,8 @@ namespace Snap
 
             struct IslandEnvironment;
 
-            template <typename THandle, typename TFree>
-            class SafeHandle
-            {
-            private:
-                THandle m_handle;
-                TFree m_free;
-            public:
-                SafeHandle(THandle, TFree);
-                ~SafeHandle();
-                THandle Get() const;
-                operator THandle() const;
-                operator bool() const;
-            };
-
-            using SafeFileHandle = SafeHandle<HANDLE, decltype(&CloseHandle)>;
-            using SafeMappedView = SafeHandle<LPVOID, decltype(&UnmapViewOfFile)>;
+            using UNIQUE_HANDLE = wil::unique_any<HANDLE, decltype(&CloseHandle), CloseHandle>;
+            using UNIQUE_VIEW_OF_FILE = wil::unique_any<LPVOID, decltype(&UnmapViewOfFile), UnmapViewOfFile>;
         }
     }
 }
@@ -57,41 +44,9 @@ enum struct Snap::Hutao::UnlockerIsland::IslandState : int
 
 struct Snap::Hutao::UnlockerIsland::IslandEnvironment
 {
-    LPVOID Address;
+    INT32* Address;
     INT32 Value;
     enum IslandState State;
     DWORD LastError;
     INT32 Reserved;
 };
-
-template <typename THandle, typename TFree>
-Snap::Hutao::UnlockerIsland::SafeHandle<THandle, TFree>::SafeHandle(THandle handle, TFree free) : m_handle(handle), m_free(free)
-{
-}
-
-template <typename THandle, typename TFree>
-Snap::Hutao::UnlockerIsland::SafeHandle<THandle, TFree>::~SafeHandle()
-{
-    if (m_handle)
-    {
-        m_free(m_handle);
-    }
-}
-
-template <typename THandle, typename TFree>
-THandle Snap::Hutao::UnlockerIsland::SafeHandle<THandle, TFree>::Get() const
-{
-    return m_handle;
-}
-
-template <typename THandle, typename TFree>
-Snap::Hutao::UnlockerIsland::SafeHandle<THandle, TFree>::operator THandle() const
-{
-    return m_handle;
-}
-
-template <typename THandle, typename TFree>
-Snap::Hutao::UnlockerIsland::SafeHandle<THandle, TFree>::operator bool() const
-{
-    return m_handle != NULL && m_handle != INVALID_HANDLE_VALUE;
-}

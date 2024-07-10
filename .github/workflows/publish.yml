@@ -10,11 +10,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout Repository
+    - name: Checkout Repo
       uses: actions/checkout@v2
 
-    - name: Add msbuild to PATH
+    - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
+
+    - name: Restore NuGet Packages
+      run: nuget restore src\UnlockerIsland\UnlockerIsland.sln
 
     - name: Build
       run: msbuild src\UnlockerIsland\UnlockerIsland.sln /p:Configuration=Release

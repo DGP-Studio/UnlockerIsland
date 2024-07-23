@@ -1,7 +1,24 @@
-﻿#include "dllmain.h"
+﻿#include "dllmain.hpp"
 #include "ntprivate.h"
+#include "hook.hpp"
 
 using namespace Snap::Hutao::UnlockerIsland;
+
+static VOID SetFieldOfViewEndpoint(LPVOID pThis, FLOAT value)
+{
+    if (pEnvironment->FieldOfView == 30.0f)
+    {
+        reinterpret_cast<void (*)(BYTE)>(staging.FunctionFog)(false);
+    }
+
+    if (pEnvironment->FieldOfView >= 45.0f && pEnvironment->FieldOfView <= 55.0f)
+    {
+        reinterpret_cast<void (*)(INT32)>(staging.FunctionTargetFrameRate)(pEnvironment->TargetFrameRate);
+        reinterpret_cast<void (*)(BYTE)>(staging.FunctionFog)(pEnvironment->DisableFog);
+    }
+
+    reinterpret_cast<void (*)(LPVOID, FLOAT)>(staging.FunctionFieldOfView)(pThis, value);
+}
 
 static DWORD WINAPI IslandThread(LPVOID lpParam)
 {
@@ -17,41 +34,30 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
         return GetLastError();
     }
 
-    pIslandEnvironment = static_cast<IslandEnvironment*>(lpView.get());
-    INT32* const address = pIslandEnvironment->Address;
+    pEnvironment = static_cast<IslandEnvironment*>(lpView.get());
 
-    MEMORY_BASIC_INFORMATION mbi = { 0 };
-    if (!VirtualQuery(address, &mbi, sizeof(mbi)))
-    {
-        DWORD error = GetLastError();
-        pIslandEnvironment->State = IslandState::Error;
-        pIslandEnvironment->LastError = error;
-        return error;
-    }
+    pEnvironment->State = IslandState::Started;
 
-    if (mbi.Protect != PAGE_READWRITE)
-    {
-        DWORD error = ERROR_INVALID_ADDRESS;
-        pIslandEnvironment->State = IslandState::Error;
-        pIslandEnvironment->LastError = error;
-        return error;
-    }
+    UINT64 base = (UINT64)GetModuleHandleW(NULL);
 
-    pIslandEnvironment->State = IslandState::Started;
+    staging.FunctionFieldOfView = reinterpret_cast<LPVOID>(pEnvironment->FunctionOffsetFieldOfView + base);
+    staging.FunctionTargetFrameRate = reinterpret_cast<LPVOID>(pEnvironment->FunctionOffsetTargetFrameRate + base);
+    staging.FunctionFog = reinterpret_cast<LPVOID>(pEnvironment->FunctionOffsetFog + base);
+
+    Detours::Hook(&staging.FunctionFieldOfView, SetFieldOfViewEndpoint);
 
     while (!bDllExit)
     {
-        *address = pIslandEnvironment->Value;
-        Sleep(62);
+        // Do nothing
     }
 
-    pIslandEnvironment->State = IslandState::Stopped;
+    pEnvironment->State = IslandState::Stopped;
 
     FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), 0);
     return 0;
 }
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
     if (hModule)
     {

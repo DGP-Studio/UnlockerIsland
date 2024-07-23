@@ -1,8 +1,12 @@
-﻿#include "dllmain.hpp"
-#include "ntprivate.h"
-#include "hook.hpp"
+﻿// dllmain.cpp : 定义 DLL 应用程序的入口点。
+#include "pch.h"
 
 using namespace Snap::Hutao::UnlockerIsland;
+
+HANDLE hThread = NULL;
+BOOL bDllExit = FALSE;
+struct IslandEnvironment* pEnvironment = NULL;
+struct IslandStaging staging {};
 
 static VOID SetFieldOfViewEndpoint(LPVOID pThis, FLOAT value)
 {
@@ -72,31 +76,31 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
     switch (ul_reason_for_call)
     {
-        case DLL_PROCESS_ATTACH:
-            if (hModule)
-            {
-                LdrAddRefDll(LDR_ADDREF_DLL_PIN, hModule);
-            }
+    case DLL_PROCESS_ATTACH:
+        if (hModule)
+        {
+            LdrAddRefDll(LDR_ADDREF_DLL_PIN, hModule);
+        }
 
-            hThread = CreateThread(NULL, 0, IslandThread, hModule, 0, NULL);
-            if (!hThread)
-            {
-                return FALSE;
-            }
+        hThread = CreateThread(NULL, 0, IslandThread, hModule, 0, NULL);
+        if (!hThread)
+        {
+            return FALSE;
+        }
 
-            CloseHandle(hThread);
+        CloseHandle(hThread);
+        break;
+
+    case DLL_PROCESS_DETACH:
+        if (!ISLAND_FEATURE_HANDLE_DLL_PROCESS_DETACH)
+        {
             break;
+        }
 
-        case DLL_PROCESS_DETACH:
-            if (!ISLAND_FEATURE_HANDLE_DLL_PROCESS_DETACH)
-            {
-                break;
-            }
+        bDllExit = TRUE;
 
-            bDllExit = TRUE;
-
-            Sleep(500);
-            break;
+        Sleep(500);
+        break;
     }
 
     return TRUE;

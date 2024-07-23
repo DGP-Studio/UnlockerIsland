@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.10.35013.160
+VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Snap.Hutao.UnlockerIsland", "Snap.Hutao.UnlockerIsland\Snap.Hutao.UnlockerIsland.vcxproj", "{578F19FB-BD4F-4CCD-BA24-861760C3E8ED}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Snap.Hutao.UnlockerIsland", "Snap.Hutao.UnlockerIsland\Snap.Hutao.UnlockerIsland.vcxproj", "{0094E4BE-8B50-43CA-89A4-829BEF04C73B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,19 +13,19 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{578F19FB-BD4F-4CCD-BA24-861760C3E8ED}.Debug|x64.ActiveCfg = Debug|x64
-		{578F19FB-BD4F-4CCD-BA24-861760C3E8ED}.Debug|x64.Build.0 = Debug|x64
-		{578F19FB-BD4F-4CCD-BA24-861760C3E8ED}.Debug|x86.ActiveCfg = Debug|Win32
-		{578F19FB-BD4F-4CCD-BA24-861760C3E8ED}.Debug|x86.Build.0 = Debug|Win32
-		{578F19FB-BD4F-4CCD-BA24-861760C3E8ED}.Release|x64.ActiveCfg = Release|x64
-		{578F19FB-BD4F-4CCD-BA24-861760C3E8ED}.Release|x64.Build.0 = Release|x64
-		{578F19FB-BD4F-4CCD-BA24-861760C3E8ED}.Release|x86.ActiveCfg = Release|Win32
-		{578F19FB-BD4F-4CCD-BA24-861760C3E8ED}.Release|x86.Build.0 = Release|Win32
+		{0094E4BE-8B50-43CA-89A4-829BEF04C73B}.Debug|x64.ActiveCfg = Debug|x64
+		{0094E4BE-8B50-43CA-89A4-829BEF04C73B}.Debug|x64.Build.0 = Debug|x64
+		{0094E4BE-8B50-43CA-89A4-829BEF04C73B}.Debug|x86.ActiveCfg = Debug|Win32
+		{0094E4BE-8B50-43CA-89A4-829BEF04C73B}.Debug|x86.Build.0 = Debug|Win32
+		{0094E4BE-8B50-43CA-89A4-829BEF04C73B}.Release|x64.ActiveCfg = Release|x64
+		{0094E4BE-8B50-43CA-89A4-829BEF04C73B}.Release|x64.Build.0 = Release|x64
+		{0094E4BE-8B50-43CA-89A4-829BEF04C73B}.Release|x86.ActiveCfg = Release|Win32
+		{0094E4BE-8B50-43CA-89A4-829BEF04C73B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D04FE4E5-DFCA-44F7-B689-A46EA73F0F01}
+		SolutionGuid = {A19C1D56-4BCA-4F49-9A5A-2D4F239B1F79}
 	EndGlobalSection
 EndGlobal

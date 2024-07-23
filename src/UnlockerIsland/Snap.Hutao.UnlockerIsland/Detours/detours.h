@@ -15,7 +15,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 //
-#define DETOURS_INTERNAL
+
 #ifdef DETOURS_INTERNAL
 
 #define _CRT_STDIO_ARBITRARY_WIDE_SPECIFIERS 1

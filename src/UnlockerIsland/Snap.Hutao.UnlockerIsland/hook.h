@@ -1,5 +1,7 @@
+#pragma once
+
+#include "Detours/detours.h"
 #include <map>
-#include "detours.h"
 
 class Detours
 {
@@ -60,5 +62,5 @@ public:
     }
 
 private:
-    inline static std::map<LPVOID, LPVOID*> hookedFunctions {};
+    inline static std::map<LPVOID, LPVOID*> hookedFunctions = {};
 };

@@ -1,6 +1,8 @@
-#pragma once
+Ôªø#pragma once
 
-#include <Windows.h>
+#define WIN32_LEAN_AND_MEAN             // ‰ªé Windows Â§¥Êñá‰ª∂‰∏≠ÊéíÈô§ÊûÅÂ∞ë‰ΩøÁî®ÁöÑÂÜÖÂÆπ
+// Windows Â§¥Êñá‰ª∂
+#include <windows.h>
 #include <wil/resource.h>
 
 #define ISLAND_API EXTERN_C __declspec(dllexport)
@@ -32,11 +34,6 @@ namespace Snap
                 LPVOID FunctionTargetFrameRate;
                 LPVOID FunctionFog;
             };
-
-            HANDLE hThread = NULL;
-            BOOL bDllExit = FALSE;
-            struct IslandEnvironment* pEnvironment = NULL;
-            struct IslandStaging staging {};
         }
     }
 }
@@ -51,23 +48,23 @@ enum struct Snap::Hutao::UnlockerIsland::IslandState : int
 
 // Layout:
 // 0            1                  4                 8
-// ©∞-------------------------------------------------©¥
-// ©¶ Reserved1                                       ©¶
-// ©¿-------------------------------©–-----------------©» 8
-// ©¶ Reserved2                     ©¶ State           ©¶
-// ©¿-------------------------------©‡-----------------©» 16
-// ©¶ LastError                     ©¶ Reserved3       ©¶
-// ©¿-------------------------------©‡-----------------©» 24
-// ©¶ FieldOfView                   ©¶ TargetFrameRate ©¶
-// ©¿------------©–------------------©ÿ-----------------©» 32
-// ©¶ DisableFog ©¶                                    ©¶
-// ©¿------------©ÿ------------------------------------©» 40
-// ©¶ FunctionOffsetFieldOfView                       ©¶
-// ©¿-------------------------------------------------©» 48
-// ©¶ FunctionOffsetTargetFrameRate                   ©¶
-// ©¿-------------------------------------------------©» 56
-// ©¶ FunctionOffsetFog                               ©¶
-// ©∏-------------------------------------------------©º 64
+// ‚îå-------------------------------------------------‚îê
+// ‚îÇ Reserved1                                       ‚îÇ
+// ‚îú-------------------------------‚î¨-----------------‚î§ 8
+// ‚îÇ Reserved2                     ‚îÇ State           ‚îÇ
+// ‚îú-------------------------------‚îº-----------------‚î§ 16
+// ‚îÇ LastError                     ‚îÇ Reserved3       ‚îÇ
+// ‚îú-------------------------------‚îº-----------------‚î§ 24
+// ‚îÇ FieldOfView                   ‚îÇ TargetFrameRate ‚îÇ
+// ‚îú------------‚î¨------------------‚î¥-----------------‚î§ 32
+// ‚îÇ DisableFog ‚îÇ                                    ‚îÇ
+// ‚îú------------‚î¥------------------------------------‚î§ 40
+// ‚îÇ FunctionOffsetFieldOfView                       ‚îÇ
+// ‚îú-------------------------------------------------‚î§ 48
+// ‚îÇ FunctionOffsetTargetFrameRate                   ‚îÇ
+// ‚îú-------------------------------------------------‚î§ 56
+// ‚îÇ FunctionOffsetFog                               ‚îÇ
+// ‚îî-------------------------------------------------‚îò 64
 struct Snap::Hutao::UnlockerIsland::IslandEnvironment
 {
     DWORD Reserved1;

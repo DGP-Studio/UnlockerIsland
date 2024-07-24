@@ -67,7 +67,7 @@ enum struct Snap::Hutao::UnlockerIsland::IslandState : int
 // └-------------------------------------------------┘ 64
 struct Snap::Hutao::UnlockerIsland::IslandEnvironment
 {
-    DWORD Reserved1;
+    LPVOID Reserved1;
     DWORD Reserved2;
     enum IslandState State;
     DWORD LastError;
@@ -77,7 +77,7 @@ struct Snap::Hutao::UnlockerIsland::IslandEnvironment
     INT32 TargetFrameRate;
     BYTE DisableFog;
 
-    UINT32 FunctionOffsetFieldOfView;
-    UINT32 FunctionOffsetTargetFrameRate;
-    UINT32 FunctionOffsetFog;
+    UINT64 FunctionOffsetFieldOfView;
+    UINT64 FunctionOffsetTargetFrameRate;
+    UINT64 FunctionOffsetFog;
 };

@@ -52,7 +52,7 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
 
     Detours::Hook(&staging.FunctionFieldOfView, SetFieldOfViewEndpoint);
 
-    while (!bDllExit)
+    while (true)
     {
         // Do nothing
     }
@@ -99,7 +99,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
             break;
         }
 
-        bDllExit = TRUE;
+        if (lpReserved)
+        {
+            bDllExit = TRUE;
+        }
 
         Sleep(500);
         break;

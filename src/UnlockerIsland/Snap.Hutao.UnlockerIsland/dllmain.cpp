@@ -10,6 +10,7 @@ struct IslandStaging staging {};
 
 static VOID SetFieldOfViewEndpoint(LPVOID pThis, FLOAT value)
 {
+    value = std::floor(value);
     if (pEnvironment->FieldOfView == 30.0f)
     {
         reinterpret_cast<void (*)(BYTE)>(staging.FunctionFog)(false);
@@ -17,8 +18,9 @@ static VOID SetFieldOfViewEndpoint(LPVOID pThis, FLOAT value)
 
     if (pEnvironment->FieldOfView >= 45.0f && pEnvironment->FieldOfView <= 55.0f)
     {
+        value = pEnvironment->FieldOfView;
         reinterpret_cast<void (*)(INT32)>(staging.FunctionTargetFrameRate)(pEnvironment->TargetFrameRate);
-        reinterpret_cast<void (*)(BYTE)>(staging.FunctionFog)(pEnvironment->DisableFog);
+        reinterpret_cast<void (*)(BYTE)>(staging.FunctionFog)(!pEnvironment->DisableFog);
     }
 
     reinterpret_cast<void (*)(LPVOID, FLOAT)>(staging.FunctionFieldOfView)(pThis, value);

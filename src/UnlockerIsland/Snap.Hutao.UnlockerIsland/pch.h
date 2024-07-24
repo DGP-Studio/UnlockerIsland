@@ -11,5 +11,6 @@
 #include "framework.h"
 #include "ntprivate.h"
 #include "hook.h"
+#include <cmath>
 
 #endif //PCH_H

@@ -75,7 +75,7 @@ struct Snap::Hutao::UnlockerIsland::IslandEnvironment
 
     FLOAT FieldOfView;
     INT32 TargetFrameRate;
-    BYTE DisableFog;
+    bool DisableFog;
 
     UINT64 FunctionOffsetFieldOfView;
     UINT64 FunctionOffsetTargetFrameRate;

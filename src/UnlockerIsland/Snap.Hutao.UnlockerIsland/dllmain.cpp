@@ -50,7 +50,7 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
     staging.SetTargetFrameRate = reinterpret_cast<SetTargetFrameRateFunc>(base + pEnvironment->FunctionOffsetTargetFrameRate);
     staging.SetFog = reinterpret_cast<SetFogFunc>(base + pEnvironment->FunctionOffsetFog);
 
-    Detours::Hook(&(PVOID&)staging.SetFieldOfView, SetFieldOfViewEndpoint);
+    Detours::Hook(&(LPVOID&)staging.SetFieldOfView, SetFieldOfViewEndpoint);
 
     while (true)
     {

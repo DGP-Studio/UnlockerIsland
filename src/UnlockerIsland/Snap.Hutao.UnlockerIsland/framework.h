@@ -28,12 +28,7 @@ namespace Snap
             enum struct IslandState;
 
             struct IslandEnvironment;
-            struct IslandStaging
-            {
-                LPVOID FunctionFieldOfView;
-                LPVOID FunctionTargetFrameRate;
-                LPVOID FunctionFog;
-            };
+            struct IslandStaging;
         }
     }
 }
@@ -69,4 +64,11 @@ struct Snap::Hutao::UnlockerIsland::IslandEnvironment
     UINT32 FunctionOffsetFieldOfView;
     UINT32 FunctionOffsetTargetFrameRate;
     UINT32 FunctionOffsetFog;
+};
+
+struct Snap::Hutao::UnlockerIsland::IslandStaging
+{
+    LPVOID FunctionFieldOfView;
+    LPVOID FunctionTargetFrameRate;
+    LPVOID FunctionFog;
 };

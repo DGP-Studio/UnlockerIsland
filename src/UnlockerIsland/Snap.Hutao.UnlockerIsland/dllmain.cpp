@@ -46,9 +46,9 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
 
     UINT64 base = (UINT64)GetModuleHandleW(NULL);
 
-    staging.FunctionFieldOfView = reinterpret_cast<LPVOID>(pEnvironment->FunctionOffsetFieldOfView + base);
-    staging.FunctionTargetFrameRate = reinterpret_cast<LPVOID>(pEnvironment->FunctionOffsetTargetFrameRate + base);
-    staging.FunctionFog = reinterpret_cast<LPVOID>(pEnvironment->FunctionOffsetFog + base);
+    staging.FunctionFieldOfView = reinterpret_cast<LPVOID>(base + pEnvironment->FunctionOffsetFieldOfView);
+    staging.FunctionTargetFrameRate = reinterpret_cast<LPVOID>(base + pEnvironment->FunctionOffsetTargetFrameRate);
+    staging.FunctionFog = reinterpret_cast<LPVOID>(base + pEnvironment->FunctionOffsetFog);
 
     Detours::Hook(&staging.FunctionFieldOfView, SetFieldOfViewEndpoint);
 

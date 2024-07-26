@@ -13,17 +13,17 @@ static VOID SetFieldOfViewEndpoint(LPVOID pThis, FLOAT value)
     value = std::floor(value);
     if (pEnvironment->FieldOfView == 30.0f)
     {
-        reinterpret_cast<void (*)(BYTE)>(staging.FunctionFog)(false);
+        staging.SetFog(false);
     }
 
     if (pEnvironment->FieldOfView >= 45.0f && pEnvironment->FieldOfView <= 55.0f)
     {
         value = pEnvironment->FieldOfView;
-        reinterpret_cast<void (*)(INT32)>(staging.FunctionTargetFrameRate)(pEnvironment->TargetFrameRate);
-        reinterpret_cast<void (*)(BYTE)>(staging.FunctionFog)(!pEnvironment->DisableFog);
+        staging.SetTargetFrameRate(pEnvironment->TargetFrameRate);
+        staging.SetFog(!pEnvironment->DisableFog);
     }
 
-    reinterpret_cast<void (*)(LPVOID, FLOAT)>(staging.FunctionFieldOfView)(pThis, value);
+    staging.SetFieldOfView(pThis, value);
 }
 
 static DWORD WINAPI IslandThread(LPVOID lpParam)
@@ -46,11 +46,11 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
 
     UINT64 base = (UINT64)GetModuleHandleW(NULL);
 
-    staging.FunctionFieldOfView = reinterpret_cast<LPVOID>(base + pEnvironment->FunctionOffsetFieldOfView);
-    staging.FunctionTargetFrameRate = reinterpret_cast<LPVOID>(base + pEnvironment->FunctionOffsetTargetFrameRate);
-    staging.FunctionFog = reinterpret_cast<LPVOID>(base + pEnvironment->FunctionOffsetFog);
+    staging.SetFieldOfView = reinterpret_cast<SetFieldOfViewFunc>(base + pEnvironment->FunctionOffsetFieldOfView);
+    staging.SetTargetFrameRate = reinterpret_cast<SetTargetFrameRateFunc>(base + pEnvironment->FunctionOffsetTargetFrameRate);
+    staging.SetFog = reinterpret_cast<SetFogFunc>(base + pEnvironment->FunctionOffsetFog);
 
-    Detours::Hook(&staging.FunctionFieldOfView, SetFieldOfViewEndpoint);
+    Detours::Hook(&(PVOID&)staging.SetFieldOfView, SetFieldOfViewEndpoint);
 
     while (true)
     {

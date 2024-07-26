@@ -66,9 +66,9 @@ struct Snap::Hutao::UnlockerIsland::IslandEnvironment
     UINT32 FunctionOffsetFog;
 };
 
-typedef void (*SetFieldOfViewFunc)(void* this__, float value);
-typedef void (*SetTargetFrameRateFunc)(int value);
-typedef void (*SetFogFunc)(bool value);
+typedef VOID (*SetFieldOfViewFunc)(LPVOID this__, FLOAT value);
+typedef VOID (*SetTargetFrameRateFunc)(INT32 value);
+typedef VOID (*SetFogFunc)(bool value);
 
 struct Snap::Hutao::UnlockerIsland::IslandStaging
 {

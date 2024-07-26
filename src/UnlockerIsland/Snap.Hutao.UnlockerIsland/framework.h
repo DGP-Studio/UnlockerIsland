@@ -47,37 +47,26 @@ enum struct Snap::Hutao::UnlockerIsland::IslandState : int
 };
 
 // Layout:
-// 0            1                  4                 8
-// ┌-------------------------------------------------┐
-// │ Reserved1                                       │
-// ├-------------------------------┬-----------------┤ 8
-// │ Reserved2                     │ State           │
-// ├-------------------------------┼-----------------┤ 16
-// │ LastError                     │ Reserved3       │
-// ├-------------------------------┼-----------------┤ 24
-// │ FieldOfView                   │ TargetFrameRate │
-// ├------------┬------------------┴-----------------┤ 32
-// │ DisableFog │                                    │
-// ├------------┴------------------------------------┤ 40
-// │ FunctionOffsetFieldOfView                       │
-// ├-------------------------------------------------┤ 48
-// │ FunctionOffsetTargetFrameRate                   │
-// ├-------------------------------------------------┤ 56
-// │ FunctionOffsetFog                               │
-// └-------------------------------------------------┘ 64
+// 0            1                  4                           8
+// ┌-------------------------------┬---------------------------┐
+// │ State                         │ LastError                 │
+// ├-------------------------------┼---------------------------┤ 8
+// │ FieldOfView                   │ TargetFrameRate           │
+// ├------------┬------------------┼---------------------------┤ 16
+// │ DisableFog │                  │ FunctionOffsetFieldOfView │
+// ├------------┴------------------┼---------------------------┤ 24
+// │ FunctionOffsetTargetFrameRate │ FunctionOffsetFog         │
+// └-------------------------------┴---------------------------┘ 32
 struct Snap::Hutao::UnlockerIsland::IslandEnvironment
 {
-    LPVOID Reserved1;
-    DWORD Reserved2;
     enum IslandState State;
     DWORD LastError;
-    DWORD Reserved3;
 
     FLOAT FieldOfView;
     INT32 TargetFrameRate;
     bool DisableFog;
 
-    UINT64 FunctionOffsetFieldOfView;
-    UINT64 FunctionOffsetTargetFrameRate;
-    UINT64 FunctionOffsetFog;
+    UINT32 FunctionOffsetFieldOfView;
+    UINT32 FunctionOffsetTargetFrameRate;
+    UINT32 FunctionOffsetFog;
 };

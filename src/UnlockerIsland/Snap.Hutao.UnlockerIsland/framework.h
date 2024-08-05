@@ -42,16 +42,16 @@ enum struct Snap::Hutao::UnlockerIsland::IslandState : int
 };
 
 // Layout:
-// 0            1                  4                           8
-// ┌-------------------------------┬---------------------------┐
-// │ State                         │ LastError                 │
-// ├-------------------------------┼---------------------------┤ 8
-// │ FieldOfView                   │ TargetFrameRate           │
-// ├------------┬------------------┼---------------------------┤ 16
-// │ DisableFog │                  │ FunctionOffsetFieldOfView │
-// ├------------┴------------------┼---------------------------┤ 24
-// │ FunctionOffsetTargetFrameRate │ FunctionOffsetFog         │
-// └-------------------------------┴---------------------------┘ 32
+// 0            1                  2  4                           8
+// ┌----------------------------------┬---------------------------┐
+// │ State                            │ LastError                 │
+// ├----------------------------------┼---------------------------┤ 8
+// │ FieldOfView                      │ TargetFrameRate           │
+// ├------------┬------------------┬--┼---------------------------┤ 16
+// │ DisableFog │ LoopAdjustFpsOnly│  │ FunctionOffsetFieldOfView │
+// ├------------┴------------------┴--┼---------------------------┤ 24
+// │ FunctionOffsetTargetFrameRate    │ FunctionOffsetFog         │
+// └----------------------------------┴---------------------------┘ 32
 struct Snap::Hutao::UnlockerIsland::IslandEnvironment
 {
     enum IslandState State;
@@ -60,6 +60,7 @@ struct Snap::Hutao::UnlockerIsland::IslandEnvironment
     FLOAT FieldOfView;
     INT32 TargetFrameRate;
     bool DisableFog;
+    bool LoopAdjustFpsOnly;
 
     UINT32 FunctionOffsetFieldOfView;
     UINT32 FunctionOffsetTargetFrameRate;

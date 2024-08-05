@@ -61,11 +61,7 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
     else
     {
         Detours::Hook(&(LPVOID&)staging.SetFieldOfView, SetFieldOfViewEndpoint);
-
-        while (true)
-        {
-            // Do nothing
-        }
+        WaitForSingleObject(GetCurrentThread(), INFINITE);
     }
 
     pEnvironment->State = IslandState::Stopped;

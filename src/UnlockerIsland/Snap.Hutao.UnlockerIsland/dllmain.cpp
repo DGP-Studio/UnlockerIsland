@@ -11,6 +11,8 @@ struct IslandStaging staging {};
 static VOID SetFieldOfViewEndpoint(LPVOID pThis, FLOAT value)
 {
     value = std::floor(value);
+    pEnvironment->DebugOriginalFieldOfView = value;
+
     if (pEnvironment->FieldOfView == 30.0f)
     {
         staging.SetEnableFogRendering(false);

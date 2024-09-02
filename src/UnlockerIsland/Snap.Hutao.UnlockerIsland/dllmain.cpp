@@ -13,14 +13,14 @@ static VOID SetFieldOfViewEndpoint(LPVOID pThis, FLOAT value)
     value = std::floor(value);
     if (pEnvironment->FieldOfView == 30.0f)
     {
-        staging.SetFog(false);
+        staging.SetEnableFogRendering(false);
     }
 
     if (pEnvironment->FieldOfView >= 45.0f && pEnvironment->FieldOfView <= 55.0f)
     {
         value = pEnvironment->FieldOfView;
         staging.SetTargetFrameRate(pEnvironment->TargetFrameRate);
-        staging.SetFog(!pEnvironment->DisableFog);
+        staging.SetEnableFogRendering(!pEnvironment->DisableFog);
     }
 
     staging.SetFieldOfView(pThis, value);
@@ -46,9 +46,9 @@ static DWORD WINAPI IslandThread(LPVOID lpParam)
 
     UINT64 base = (UINT64)GetModuleHandleW(NULL);
 
-    staging.SetFieldOfView = reinterpret_cast<SetFieldOfViewFunc>(base + pEnvironment->FunctionOffsetFieldOfView);
-    staging.SetTargetFrameRate = reinterpret_cast<SetTargetFrameRateFunc>(base + pEnvironment->FunctionOffsetTargetFrameRate);
-    staging.SetFog = reinterpret_cast<SetFogFunc>(base + pEnvironment->FunctionOffsetFog);
+    staging.SetFieldOfView = reinterpret_cast<SetFieldOfViewFunc>(base + pEnvironment->FunctionOffsetSetFieldOfView);
+    staging.SetEnableFogRendering = reinterpret_cast<SetEnableFogRenderingFunc>(base + pEnvironment->FunctionOffsetSetEnableFogRendering);
+    staging.SetTargetFrameRate = reinterpret_cast<SetTargetFrameRateFunc>(base + pEnvironment->FunctionOffsetSetTargetFrameRate);
 
     if (pEnvironment->LoopAdjustFpsOnly)
     {

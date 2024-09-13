@@ -13,19 +13,17 @@ static VOID SetFieldOfViewEndpoint(LPVOID pThis, FLOAT value)
     value = std::floor(value);
     pEnvironment->DebugOriginalFieldOfView = value;
 
-    if (pEnvironment->FieldOfView == 30.0f)
+    staging.SetTargetFrameRate(pEnvironment->TargetFrameRate);
+    if (value == 30.0f)
     {
         staging.SetEnableFogRendering(false);
+        staging.SetFieldOfView(pThis, value);
     }
-
-    if (pEnvironment->FieldOfView >= 45.0f && pEnvironment->FieldOfView <= 55.0f)
+    else
     {
-        value = pEnvironment->FieldOfView;
-        staging.SetTargetFrameRate(pEnvironment->TargetFrameRate);
         staging.SetEnableFogRendering(!pEnvironment->DisableFog);
+        staging.SetFieldOfView(pThis, pEnvironment->FieldOfView);
     }
-
-    staging.SetFieldOfView(pThis, value);
 }
 
 static DWORD WINAPI IslandThread(LPVOID lpParam)

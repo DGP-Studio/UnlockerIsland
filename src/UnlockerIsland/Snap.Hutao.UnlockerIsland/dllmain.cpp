@@ -17,13 +17,13 @@ static VOID SetFieldOfViewEndpoint(LPVOID pThis, FLOAT value)
     if (value == 30.0f)
     {
         staging.SetEnableFogRendering(false);
-        staging.SetFieldOfView(pThis, value);
     }
     else
     {
         staging.SetEnableFogRendering(!pEnvironment->DisableFog);
-        staging.SetFieldOfView(pThis, pEnvironment->FieldOfView);
     }
+
+    staging.SetFieldOfView(pThis, pEnvironment->FieldOfView);
 }
 
 static DWORD WINAPI IslandThread(LPVOID lpParam)
@@ -77,8 +77,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         DisableThreadLibraryCalls(hModule);
     }
 
-    // Check if the module is loaded by the game
-    if (!GetModuleHandleA("mhypbase.dll"))
+    // Check if the module is loaded by us
+    if (GetModuleHandleA("Snap.Hutao.dll"))
     {
         return TRUE;
     }
